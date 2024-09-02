@@ -1,0 +1,29 @@
+
+syntax = "proto3";
+package com.grpc;
+option java_multiple_files = true;
+option java_package = "com.grpc.stub";
+
+service OrderService {
+  /** Blocking send and receive **/
+  rpc createOrderForGivenOrderId (OrderId) returns (OrderDetails) { }
+  /** Server side streaming : request to create series of Orders **/
+  rpc streamAllOrderForGivenCount (OrderCount) returns (stream OrderDetails) {}
+  /** Client side streaming : request to update Order details from client
+  and return number of order get updated **/
+  rpc uploadOrderDetails(stream OrderDetails) returns (OrderCount) {}
+  /* Bi-Directional streaming */
+  rpc uploadAOrderDetailsAndReturnCount(stream OrderDetails) returns (stream OrderCount) {}
+}
+
+message OrderCount{
+  int32 count =1;
+}
+message OrderId {
+  string orderId = 1;
+}
+message OrderDetails {
+  string name = 1;
+  string orderId = 2;
+}
+
